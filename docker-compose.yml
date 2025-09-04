@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: sqibidi_questions_bd
+    environment:
+      POSTGRES_USER: sqibidi_dev
+      POSTGRES_PASSWORD: sqibidi_pwd_bd
+      POSTGRES_DB: sqibidi_questions_bd
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sqibidi-back-end/sql/init:/docker-entrypoint-initdb.d
+    networks:
+      - sqibidi-network
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./sqibidi-back-end
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./sqibidi-back-end:/app/backend
+    environment:
+      - DATABASE_URL=postgresql://sqibidi_dev:sqibidi_pwd_bd@postgres-db:5432/sqibidi_questions_bd
+    depends_on:
+      - postgres-db
+    networks:
+      - sqibidi-network
+
+  frontend:
+    build:
+      context: ./sqibidi-front-end
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./sqibidi-front-end:/app/frontend
+      - /app/frontend/node_modules
+    environment:
+      - VITE_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    networks:
+      - sqibidi-network
+
+networks:
+  sqibidi-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
