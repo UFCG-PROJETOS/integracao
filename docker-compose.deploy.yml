@@ -1,0 +1,46 @@
+services:
+  backend:
+    image: kevenalex/sqibidi-backend:latest
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://sqibidi_dev:sqibidi_pwd_bd@postgres-db:5432/sqibidi_questions_bd
+    depends_on:
+      - postgres-db
+    networks:
+      - sqibidi-network
+
+  frontend:
+    image: kevenalex/sqibidi-frontend:latest
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    networks:
+      - sqibidi-network
+
+  postgres-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=sqibidi_dev
+      - POSTGRES_PASSWORD=sqibidi_pwd_bd
+      - POSTGRES_DB=sqibidi_questions_bd
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - sqibidi-network
+
+networks:
+  sqibidi-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
