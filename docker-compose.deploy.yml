@@ -12,7 +12,7 @@ services:
       - sqibidi-network
 
   frontend:
-    image: kevenalex/sqibidi-frontend:latest
+    image: jramonalves/app:latest
     restart: unless-stopped
     ports:
       - "5173:5173"
