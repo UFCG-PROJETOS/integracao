@@ -1,6 +1,6 @@
 services:
   backend:
-    image: kevenalex/sqibidi-backend:latest
+    image: mecqema/app:latest
     restart: unless-stopped
     ports:
       - "8000:8000"
