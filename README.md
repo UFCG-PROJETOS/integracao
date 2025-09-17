@@ -7,12 +7,12 @@ Para subir o sistema disponibilizamos dois arquivos docker-compose:
 - docker-compose.yml - Sobe o sistema a partir dos repositórios locais (útil para o desenvolvimento)
 - docker-compose.deploy.yml - Sobe o sistema a partir das imagens mais recentes do sistema no dockerhub (útil para a produção)
   
-Como subir o sistema localmente:
+Como subir o sistema:
 ```bash
 sudo docker compose -f <arquivo_docker_compose> up -d
 ```
 
-Como encerrar o sistema localmente:
+Como encerrar o sistema:
 ```bash
 sudo docker compose -f <arquivo_docker_compose> down -v
 ```
