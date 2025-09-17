@@ -1,0 +1,6 @@
+[submodule "sqibidi-front-end"]
+	path = sqibidi-front-end
+	url = https://github.com/UFCG-PROJETOS/sqibidi-front-end.git
+[submodule "sqibidi-back-end"]
+	path = sqibidi-back-end
+	url = https://github.com/UFCG-PROJETOS/sqibidi-back-end.git
