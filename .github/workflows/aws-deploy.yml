@@ -1,0 +1,42 @@
+name: Deploy to AWS with Terraform
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Faz o checkout do seu código do repositório
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # 2. Configura as credenciais da AWS para os próximos passos
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # 3. Instala e configura o Terraform CLI
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.2.9 # ou a versão que preferir
+
+      # 4. Inicializa o Terraform (baixa plugins e configura o backend S3)
+      - name: Terraform Init
+        run: terraform init
+
+      # 5. Valida a sintaxe do código Terraform
+      - name: Terraform Validate
+        run: terraform validate
+
+      # 6. Aplica as mudanças na infraestrutura da AWS
+      #    O '-auto-approve' faz com que ele não peça confirmação manual
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
