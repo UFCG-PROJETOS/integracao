@@ -64,7 +64,7 @@ resource "aws_security_group" "security_group" {
 // Cria a instância EC2
 resource "aws_instance" "servidor_app" {
   ami                    = data.aws_ami.amazon_linux_2.id
-  instance_type          = "t2.micro" // t2.micro é garantido no Free Tier
+  instance_type          = "t3.micro"
   user_data              = file("user_data.sh")
   key_name               = "sqibidi-app" // <-- ATUALIZE com o nome da chave que você criou na AWS
   vpc_security_group_ids = [aws_security_group.security_group.id]
